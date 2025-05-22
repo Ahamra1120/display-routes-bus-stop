@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transit Information System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .title {
+            margin: 0;
+            color: #333;
+        }
+        .user-info {
+            font-size: 0.8em;
+            color: #777;
+        }
+        .controls {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .button-container {
+            margin-right: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            margin-right: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button.active {
+            background-color: #2E7D32;
+            font-weight: bold;
+        }
+        .search-container {
+            display: flex;
+            flex-grow: 1;
+        }
+        .search-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+        }
+        .search-button {
+            padding: 10px 15px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        .search-button:hover {
+            background-color: #0b7dda;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+        .message {
+            color: #2196F3;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 25px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: slideDown 0.4s;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .detail-button {
+            padding: 5px 10px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .detail-button:hover {
+            background-color: #0b7dda;
+        }          .route-progress {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .route-info {
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .route-line {
+            display: flex;
+            margin: 30px 0 60px 0;
+            position: relative;
+        }
+        
+        .route-stations {
+            display: flex;
+            position: relative;
+            width: 100%;
+            min-height: 30px;
+        }
+        
+        .route-station {
+            position: absolute;
+            text-align: center;
+            min-width: 20px;
+            transform: translateX(-50%);
+        }
+          .station-dot {
+            width: 24px;
+            height: 24px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            border: 3px solid white;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .route-station:hover .station-dot {
+            transform: scale(1.3);
+        }
+          .station-label {
+            display: none;
+            position: absolute;
+            white-space: nowrap;
+            padding: 6px 10px;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 10;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .station-label:after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid rgba(0,0,0,0.8);
+        }
+        
+        .route-station:hover .station-label {
+            display: block;
+            animation: fadeIn 0.2s;
+        }
+        
+        .station-direction {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #666;
+        }        .route-line-path {
+            position: absolute;
+            height: 6px;
+            background-color: #4CAF50;
+            top: 8px;
+            z-index: 1;
+            left: 0;
+            right: auto; /* Changed from right: 0 to allow width-based lines */
+        }
+        
+        .route-stations-list {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 40px;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .station-item {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            font-size: 12px;
+            border: 1px solid #eee;
+            color: #333;
+        }
+        
+        .station-number {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        
+        .map-container {
+            height: 400px;
+            width: 100%;
+            margin-top: 20px;
+        }
+          .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .tab.active {
+            background-color: white;
+            border-bottom: 2px solid white;
+            margin-bottom: -2px;
+            color: #2196F3;
+            border-top: 2px solid #2196F3;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Transit Information System</h1>
+            <div class="user-info">
+                <p>User: Ahamra1120</p>
+                <p>Date: 2025-05-21 00:20:47</p>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="button-container">
+                <button id="halteButton" class="active">Show Bus Stops</button>
+                <button id="ruteButton">Show Routes</button>
+            </div>
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search...">
+                <button class="search-button" id="searchButton">Search</button>
+            </div>
+        </div>
+        
+        <div id="message" class="message"></div>
+        <div id="loader" class="loader"></div>
+        
+        <div id="tableContainer">
+            <table id="dataTable">
+                <thead id="tableHead"></thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal for Route Details -->
+    <div id="routeDetailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="routeDetailTitle">Detail Rute</h2>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="list-view">Daftar Halte</div>
+                <div class="tab" data-tab="progress-view">Tampilan Progres</div>
+            </div>
+              <div class="tab-content active" id="list-view">
+                <table id="routeDetailTable" width="100%" style="border-collapse: collapse; border: 1px solid #ddd;">
+                    <thead>
+                        <tr style="background-color: #f2f2f2;">
+                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">No</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">ID Halte</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Nama Halte</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Arah</th>
+                        </tr>
+                    </thead>
+                    <tbody id="routeDetailTableBody">
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="tab-content" id="progress-view">
+                <div class="route-progress" id="routeProgressView">
+                    <!-- Route progress will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables to store data
+        let halteData = { halte: [] };
+        let ruteData = { rute: [] };
+        let dataLoaded = false;
+
+        // Define variables
+        let currentDataType = 'halte'; // Default view is bus stops
+        let searchTerm = '';
+
+        // Get DOM elements
+        const halteButton = document.getElementById('halteButton');
+        const ruteButton = document.getElementById('ruteButton');
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const tableHead = document.getElementById('tableHead');
+        const tableBody = document.getElementById('tableBody');
+        const messageElement = document.getElementById('message');
+        const loader = document.getElementById('loader');
+
+        // Function to load data from text files
+        async function loadData() {
+            try {
+                loader.style.display = 'block';
+                messageElement.textContent = 'Loading data...';
+                
+                // Load halte data
+                const halteResponse = await fetch('halte_data.txt');
+                if (!halteResponse.ok) {
+                    throw new Error(`HTTP error! status: ${halteResponse.status}`);
+                }
+                const halteText = await halteResponse.text();
+                // Remove comment line if exists
+                const halteJson = halteText.replace(/\/\/.*\n/, '');
+                halteData = JSON.parse(halteJson);
+                
+                // Load rute data
+                const ruteResponse = await fetch('rute_data.txt');
+                if (!ruteResponse.ok) {
+                    throw new Error(`HTTP error! status: ${ruteResponse.status}`);
+                }
+                const ruteText = await ruteResponse.text();
+                // Remove comment line if exists
+                const ruteJson = ruteText.replace(/\/\/.*\n/, '');
+                ruteData = JSON.parse(ruteJson);
+                
+                dataLoaded = true;
+                loader.style.display = 'none';
+                
+                // After data is loaded, refresh the table
+                refreshTable();
+                
+                // Show success message
+                messageElement.textContent = "Data berhasil dimuat dari file";
+                setTimeout(() => {
+                    if (messageElement.textContent === "Data berhasil dimuat dari file") {
+                        messageElement.textContent = "";
+                    }
+                }, 3000);
+            } catch (error) {
+                console.error('Error loading data:', error);
+                messageElement.textContent = `Error: ${error.message}`;
+                loader.style.display = 'none';
+            }
+        }
+
+        // Button event listeners
+        halteButton.addEventListener('click', function() {
+            currentDataType = 'halte';
+            halteButton.classList.add('active');
+            ruteButton.classList.remove('active');
+            refreshTable();
+        });
+
+        ruteButton.addEventListener('click', function() {
+            currentDataType = 'rute';
+            ruteButton.classList.add('active');
+            halteButton.classList.remove('active');
+            refreshTable();
+        });
+
+        // Search functionality
+        searchButton.addEventListener('click', function() {
+            searchTerm = searchInput.value.toLowerCase().trim();
+            refreshTable();
+        });
+
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchTerm = searchInput.value.toLowerCase().trim();
+                refreshTable();
+            }
+        });
+
+        // Function to get halte names by IDs for route display
+        function getHalteNames(halteIds) {
+            return halteIds.map(id => {
+                const halte = halteData.halte.find(h => h.id === id);
+                return halte ? halte.nama : `Unknown (ID: ${id})`;
+            }).join(', ');
+        }
+
+        // Function to refresh the table based on the current data type and search term
+        function refreshTable() {
+            // If data is not loaded yet, show loading message
+            if (!dataLoaded) {
+                messageElement.textContent = 'Loading data...';
+                return;
+            }
+            
+            // Clear previous message if it's just the loading message
+            if (messageElement.textContent === 'Loading data...') {
+                messageElement.textContent = '';
+            }
+              // Set table headers based on current data type
+            let headerRow = '';
+            if (currentDataType === 'halte') {
+                headerRow = `
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama Halte</th>
+                        <th>Longitude</th>
+                        <th>Latitude</th>
+                        <th>Arah</th>
+                    </tr>
+                `;
+            } else { // rute
+                headerRow = `
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama Rute</th>
+                        <th>Aksi</th>
+                    </tr>
+                `;
+            }
+            tableHead.innerHTML = headerRow;
+            
+            // Get and filter data based on current data type and search term
+            let filteredData = [];
+            if (currentDataType === 'halte') {
+                filteredData = halteData.halte.filter(halte => 
+                    searchTerm === '' || 
+                    halte.id.toString().includes(searchTerm) ||
+                    halte.nama.toLowerCase().includes(searchTerm) ||
+                    (halte.arah && halte.arah.toLowerCase().includes(searchTerm))
+                );
+            } else { // rute
+                filteredData = ruteData.rute.filter(rute => 
+                    searchTerm === '' || 
+                    rute.id.toString().includes(searchTerm) ||
+                    rute.nama.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Display message about search results
+            if (searchTerm !== '' && filteredData.length === 0) {
+                messageElement.textContent = `No ${currentDataType} found matching "${searchTerm}"`;
+            } else if (searchTerm !== '') {
+                messageElement.textContent = `Found ${filteredData.length} ${currentDataType}(s) matching "${searchTerm}"`;
+            }
+            
+            // Populate table rows
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="${currentDataType === 'halte' ? 5 : 3}" class="no-data">
+                            No data to display
+                        </td>
+                    </tr>
+                `;
+            } else {
+                let rows = '';
+                if (currentDataType === 'halte') {
+                    rows = filteredData.map(halte => `
+                        <tr>
+                            <td>${halte.id}</td>
+                            <td>${halte.nama}</td>
+                            <td>${halte.long}</td>
+                            <td>${halte.lat}</td>
+                            <td>${halte.arah || '-'}</td>
+                        </tr>
+                    `).join('');                } else { // rute
+                    rows = filteredData.map(rute => `
+                        <tr>
+                            <td>${rute.id}</td>
+                            <td>${rute.nama}</td>
+                            <td>
+                                <button class="detail-button" onclick="showRouteDetails(${rute.id})">Lihat Detail</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+                tableBody.innerHTML = rows;
+            }
+        }
+
+        // Initialize by loading data when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupModalEvents();
+        });
+        
+        // Modal and route detail functionality
+        const modal = document.getElementById('routeDetailModal');
+        const closeButton = document.querySelector('.close');
+        const routeDetailTitle = document.getElementById('routeDetailTitle');
+        const routeDetailTableBody = document.getElementById('routeDetailTableBody');
+        const routeProgressView = document.getElementById('routeProgressView');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        function setupModalEvents() {
+            // Close modal when clicking the X
+            closeButton.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside the modal content
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Show corresponding content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+          // Function to show route details
+        function showRouteDetails(routeId) {
+            // Find the route
+            const route = ruteData.rute.find(r => r.id === routeId);
+            if (!route) return;
+            
+            // Set the modal title
+            routeDetailTitle.textContent = `Detail Rute: ${route.nama}`;
+            
+            // Populate the table view
+            let tableRows = '';
+            route.halte.forEach((halteId, index) => {
+                const halte = halteData.halte.find(h => h.id === halteId);
+                if (halte) {
+                    const isEvenRow = index % 2 === 0;
+                    const rowStyle = isEvenRow ? 'background-color: #f9f9f9;' : '';
+                    
+                    tableRows += `
+                        <tr style="${rowStyle}">
+                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">${index + 1}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">${halte.id}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>${halte.nama}</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">
+                                ${halte.arah ? `<span style="color: ${halte.arah.toLowerCase() === 'berangkat' ? '#4CAF50' : '#F44336'};">
+                                    ${halte.arah.toUpperCase()}</span>` : '-'}
+                            </td>
+                        </tr>
+                    `;
+                }
+            });
+            routeDetailTableBody.innerHTML = tableRows;
+            
+            // Create the progress view
+            createRouteProgress(route);
+            
+            // Show the modal
+            modal.style.display = 'block';
+        }        // Function to create the route progress visualization
+        function createRouteProgress(route) {
+            if (!route || !route.halte || !route.halte.length) return;
+            
+            // Get route color or use default
+            const routeColor = route.warna || '#4CAF50';
+            
+            // Create route information
+            let html = `
+            <div class="route-info">
+                <span>Rute ${route.id}: ${route.nama}</span>
+                <div>Total ${route.halte.length} halte</div>
+            </div>`;
+              // Create the route line with stations
+            html += '<div class="route-line">';
+            html += '<div class="route-stations">';
+            
+            // Find if there are both "berangkat" and "pulang" stations
+            const hasPulangStations = route.halte.some(halteId => {
+                const halte = halteData.halte.find(h => h.id === halteId);
+                return halte && halte.arah && halte.arah.toLowerCase() === 'pulang';
+            });
+            
+            // Find the transition point (if any) from berangkat to pulang
+            let transitionPoint = 50; // Default to middle
+            if (hasPulangStations) {
+                // Find first pulang station
+                for (let i = 0; i < route.halte.length; i++) {
+                    const halte = halteData.halte.find(h => h.id === route.halte[i]);
+                    if (halte && halte.arah && halte.arah.toLowerCase() === 'pulang') {
+                        transitionPoint = (i / (route.halte.length - 1)) * 100;
+                        break;
+                    }
+                }
+            }
+            
+            // Add the lines connecting all stations with appropriate colors
+            if (hasPulangStations) {
+                // Two-colored line for routes with both directions
+                html += `<div class="route-line-path route-line-departure" style="background-color: #4CAF50; width: ${transitionPoint}%;"></div>`;
+                html += `<div class="route-line-path route-line-return" style="background-color: #F44336; left: ${transitionPoint}%; width: ${100 - transitionPoint}%;"></div>`;
+            } else {
+                // Single color for routes with one direction
+                html += `<div class="route-line-path" style="background-color: ${routeColor};"></div>`;
+            }
+            
+            // Total stations for positioning
+            const totalStations = route.halte.length;
+            
+            // First find the halte objects
+            const halteObjects = route.halte
+                .map(halteId => {
+                    return halteData.halte.find(h => h.id === halteId);
+                })
+                .filter(halte => halte); // Filter out any undefined halte
+              // Add each station dot on the line (without labels)
+            halteObjects.forEach((halte, index) => {
+                // Calculate position (evenly distributed)
+                const position = index / (totalStations - 1) * 100;
+                
+                // Determine direction icon
+                let directionIcon = '';
+                if (halte.arah) {
+                    if (halte.arah.toLowerCase() === 'berangkat') {
+                        directionIcon = '↓';
+                    } else if (halte.arah.toLowerCase() === 'pulang') {
+                        directionIcon = '↑';
+                    }
+                }
+                
+                // Determine dot color based on direction
+                const dotColor = halte.arah && halte.arah.toLowerCase() === 'berangkat' ? 
+                    '#4CAF50' : (halte.arah && halte.arah.toLowerCase() === 'pulang' ? '#F44336' : routeColor);
+                
+                html += `
+                    <div class="route-station" style="left: ${position}%;">
+                        <div class="station-dot" style="background-color: ${dotColor};" 
+                             onclick="highlightStation(${index+1})">
+                            ${index+1}
+                        </div>
+                        <div class="station-label">${directionIcon} ${halte.nama} (${halte.arah || 'N/A'})</div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>'; // Close route-stations
+            html += '</div>'; // Close route-line
+              // Add a legend
+            html += `
+            <div class="route-legend" style="text-align: center; margin-top: 10px; margin-bottom: 20px; font-size: 12px; color: #666;">
+                <div>Awal → Akhir</div>
+                <div>Arahkan kursor ke titik halte untuk melihat detail</div>
+                <div style="margin-top: 8px; display: flex; justify-content: center; gap: 15px;">
+                    <span><span style="color: #4CAF50;">●</span> <span style="color: #4CAF50;">↓</span> Arah Berangkat</span>
+                    <span><span style="color: #F44336;">●</span> <span style="color: #F44336;">↑</span> Arah Pulang</span>
+                </div>
+            </div>`;
+              // Add a list of all stations below the line
+            html += '<div class="route-stations-list">';
+            halteObjects.forEach((halte, index) => {
+                const directionColor = halte.arah && halte.arah.toLowerCase() === 'berangkat' ? 
+                    '#4CAF50' : (halte.arah && halte.arah.toLowerCase() === 'pulang' ? '#F44336' : '#888');
+                
+                // Determine direction icon
+                let directionIcon = '';
+                if (halte.arah) {
+                    if (halte.arah.toLowerCase() === 'berangkat') {
+                        directionIcon = '↓';
+                    } else if (halte.arah.toLowerCase() === 'pulang') {
+                        directionIcon = '↑';
+                    }
+                }
+                    
+                html += `
+                    <div class="station-item" id="station-item-${index+1}">
+                        <span class="station-number" style="background-color: ${directionColor};">${index+1}</span>
+                        <span>${directionIcon} ${halte.nama}</span>
+                    </div>
+                `;
+            });
+            html += '</div>'; // Close route-stations-list
+            
+            routeProgressView.innerHTML = html;
+        }
+        
+        // Function to highlight a station when clicked
+        function highlightStation(stationNumber) {
+            // Reset all station items
+            document.querySelectorAll('.station-item').forEach(item => {
+                item.style.backgroundColor = 'white';
+                item.style.transform = 'scale(1)';
+            });
+            
+            // Highlight the selected station
+            const stationItem = document.getElementById(`station-item-${stationNumber}`);
+            if (stationItem) {
+                stationItem.style.backgroundColor = '#e3f2fd';
+                stationItem.style.transform = 'scale(1.05)';
+                stationItem.style.transition = 'all 0.3s';
+                stationItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+        
+    </script>
+</body>
+</html>
