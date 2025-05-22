@@ -36,8 +36,7 @@ try {
     }
     
     // Add a file header comment
-    $fileContent = "// filepath: c:\\Hamra's Workspace\\display routes & bus stop\\rute_data.txt\n" . 
-                   json_encode($data, JSON_PRETTY_PRINT);
+    $fileContent = json_encode($data, JSON_PRETTY_PRINT);
     
     // Write the data to the file
     $filename = 'rute_data.txt';

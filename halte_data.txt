@@ -1,4 +1,3 @@
-// filepath: c:\Hamra's Workspace\display routes & bus stop\halte_data.txt
 {
     "halte": [
         {
