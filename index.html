@@ -431,14 +431,62 @@
             border-radius: 4px;
             text-align: center;
         }
-        
-        .error-message {
+          .error-message {
             background-color: #f2dede;
             color: #a94442;
             padding: 15px;
             margin-top: 15px;
             border-radius: 4px;
             text-align: center;
+        }
+        
+        /* Checkbox container styling */
+        .checkbox-container {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+        }
+        
+        .checkbox-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+        }
+        
+        .checkbox-item label {
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        
+        .halte-direction {
+            font-size: 0.85em;
+            color: #666;
+            margin-left: 5px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        
+        .direction-berangkat {
+            background-color: #e8f5e9;
+            color: #388E3C;
+        }
+        
+        .direction-pulang {
+            background-color: #ffebee;
+            color: #d32f2f;
         }
     </style>
 </head>
@@ -451,11 +499,11 @@
                 <p>Date: 2025-05-21 00:20:47</p>
             </div>
         </div>
-        
-        <div class="controls">
+          <div class="controls">
             <div class="button-container">
                 <button id="halteButton" class="active">Show Bus Stops</button>
                 <button id="ruteButton">Show Routes</button>
+                <button id="addDataButton" class="add-button">Add Data</button>
             </div>
             <div class="search-container">
                 <input type="text" id="searchInput" class="search-input" placeholder="Search...">
@@ -480,29 +528,81 @@
             <span class="close">&times;</span>
             <h2 id="routeDetailTitle">Detail Rute</h2>
             
-            <div class="tabs">
-                <div class="tab active" data-tab="list-view">Daftar Halte</div>
-                <div class="tab" data-tab="progress-view">Tampilan Progres</div>
-            </div>
-              <div class="tab-content active" id="list-view">
-                <table id="routeDetailTable" width="100%" style="border-collapse: collapse; border: 1px solid #ddd;">
-                    <thead>
-                        <tr style="background-color: #f2f2f2;">
-                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">No</th>
-                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">ID Halte</th>
-                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Nama Halte</th>
-                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Arah</th>
-                        </tr>
-                    </thead>
-                    <tbody id="routeDetailTableBody">
-                    </tbody>
-                </table>
-            </div>
+            <table id="routeDetailTable" width="100%" style="border-collapse: collapse; border: 1px solid #ddd;">
+                <thead>
+                    <tr style="background-color: #f2f2f2;">
+                        <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">No</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">ID Halte</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Nama Halte</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Arah</th>
+                    </tr>
+                </thead>
+                <tbody id="routeDetailTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Modal for Add Data Form -->
+    <div id="addDataModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close" id="closeAddDataModal">&times;</span>
+            <h2 id="addDataTitle">Add New Data</h2>
             
-            <div class="tab-content" id="progress-view">
-                <div class="route-progress" id="routeProgressView">
-                    <!-- Route progress will be inserted here -->
-                </div>
+            <div class="tabs">
+                <div class="tab active" data-tab="add-halte">Add Bus Stop</div>
+                <div class="tab" data-tab="add-route">Add Route</div>
+            </div>
+              <div class="tab-content active" id="add-halte">
+                <form id="addHalteForm">
+                    <!-- ID will be auto-generated -->
+                    <div class="form-group">
+                        <label for="halteName">Nama Halte</label>
+                        <input type="text" id="halteName" name="halteName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="halteLong">Longitude</label>
+                        <input type="number" id="halteLong" name="halteLong" step="0.00001" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="halteLat">Latitude</label>
+                        <input type="number" id="halteLat" name="halteLat" step="0.00001" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="halteDirection">Arah</label>
+                        <select id="halteDirection" name="halteDirection">
+                            <option value="berangkat">Berangkat</option>
+                            <option value="pulang">Pulang</option>
+                            <option value="">Tidak Ada</option>
+                        </select>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="cancel-button" id="cancelHalteForm">Cancel</button>
+                        <button type="submit" class="submit-button">Submit</button>
+                    </div>
+                    <div id="halteFormMessage"></div>
+                </form>
+            </div>
+              <div class="tab-content" id="add-route">
+                <form id="addRouteForm">
+                    <!-- ID will be auto-generated -->
+                    <div class="form-group">
+                        <label for="routeName">Nama Rute</label>
+                        <input type="text" id="routeName" name="routeName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Pilih Halte</label>
+                        <div id="halteCheckboxContainer" class="checkbox-container">
+                            <!-- Checkboxes will be generated dynamically -->
+                            <div class="loading-halte">Loading bus stops...</div>
+                        </div>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="cancel-button" id="cancelRouteForm">Cancel</button>
+                        <button type="submit" class="submit-button">Submit</button>
+                    </div>
+                    <div id="routeFormMessage"></div>
+                </form>
             </div>
         </div>
     </div>
@@ -520,6 +620,7 @@
         // Get DOM elements
         const halteButton = document.getElementById('halteButton');
         const ruteButton = document.getElementById('ruteButton');
+        const addDataButton = document.getElementById('addDataButton');
         const searchInput = document.getElementById('searchInput');
         const searchButton = document.getElementById('searchButton');
         const tableHead = document.getElementById('tableHead');
@@ -701,92 +802,91 @@
                 }
                 tableBody.innerHTML = rows;
             }
-        }
-
-        // Initialize by loading data when the page loads
+        }        // Initialize by loading data when the page loads
         document.addEventListener('DOMContentLoaded', function() {
             loadData();
             setupModalEvents();
+            setupAddDataModalEvents();
         });
         
-        // Modal and route detail functionality
-        const modal = document.getElementById('routeDetailModal');
-        const closeButton = document.querySelector('.close');
-        const routeDetailTitle = document.getElementById('routeDetailTitle');
-        const routeDetailTableBody = document.getElementById('routeDetailTableBody');
-        const routeProgressView = document.getElementById('routeProgressView');
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
+        // Setup events for the route detail modal
         function setupModalEvents() {
-            // Close modal when clicking the X
-            closeButton.addEventListener('click', function() {
+            const modal = document.getElementById('routeDetailModal');
+            const closeBtn = modal.querySelector('.close');
+            
+            // Close the modal when the X is clicked
+            closeBtn.addEventListener('click', function() {
                 modal.style.display = 'none';
             });
             
-            // Close modal when clicking outside the modal content
+            // Close the modal when clicking outside the modal content
             window.addEventListener('click', function(event) {
                 if (event.target === modal) {
                     modal.style.display = 'none';
                 }
             });
-            
-            // Tab switching
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // Remove active class from all tabs and contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(c => c.classList.remove('active'));
-                    
-                    // Add active class to clicked tab
-                    this.classList.add('active');
-                    
-                    // Show corresponding content
-                    const tabId = this.getAttribute('data-tab');
-                    document.getElementById(tabId).classList.add('active');
-                });
-            });
         }
-          // Function to show route details
+        
+        // Function to show route details in the modal
         function showRouteDetails(routeId) {
-            // Find the route
             const route = ruteData.rute.find(r => r.id === routeId);
-            if (!route) return;
+            if (!route) {
+                alert('Route not found!');
+                return;
+            }
             
-            // Set the modal title
-            routeDetailTitle.textContent = `Detail Rute: ${route.nama}`;
+            // Set modal title
+            const routeDetailTitle = document.getElementById('routeDetailTitle');
+            routeDetailTitle.textContent = `Detail Rute: ${route.nama} (ID: ${route.id})`;
             
             // Populate the table view
-            let tableRows = '';
+            populateRouteDetailTable(route);
+            
+            // Show the modal
+            const modal = document.getElementById('routeDetailModal');
+            modal.style.display = 'block';
+        }
+        
+        // Function to populate the route detail table
+        function populateRouteDetailTable(route) {
+            const tableBody = document.getElementById('routeDetailTableBody');
+            let rows = '';
+            
             route.halte.forEach((halteId, index) => {
                 const halte = halteData.halte.find(h => h.id === halteId);
+                
                 if (halte) {
-                    const isEvenRow = index % 2 === 0;
-                    const rowStyle = isEvenRow ? 'background-color: #f9f9f9;' : '';
-                    
-                    tableRows += `
-                        <tr style="${rowStyle}">
-                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">${index + 1}</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">${halte.id}</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>${halte.nama}</strong></td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">
-                                ${halte.arah ? `<span style="color: ${halte.arah.toLowerCase() === 'berangkat' ? '#4CAF50' : '#F44336'};">
-                                    ${halte.arah.toUpperCase()}</span>` : '-'}
-                            </td>
+                    rows += `
+                        <tr>
+                            <td style="text-align: center; border: 1px solid #ddd;">${index + 1}</td>
+                            <td style="border: 1px solid #ddd;">${halte.id}</td>
+                            <td style="border: 1px solid #ddd;">${halte.nama}</td>
+                            <td style="border: 1px solid #ddd;">${halte.arah || '-'}</td>
+                        </tr>
+                    `;
+                } else {
+                    rows += `
+                        <tr>
+                            <td style="text-align: center; border: 1px solid #ddd;">${index + 1}</td>
+                            <td style="border: 1px solid #ddd;">${halteId}</td>
+                            <td style="border: 1px solid #ddd;">Unknown</td>
+                            <td style="border: 1px solid #ddd;">-</td>
                         </tr>
                     `;
                 }
             });
-            routeDetailTableBody.innerHTML = tableRows;
             
-            // Create the progress view
-            createRouteProgress(route);
-            
-            // Show the modal
-            modal.style.display = 'block';
-        }        // Function to create the route progress visualization
+            tableBody.innerHTML = rows;
+        }
+        
+        // Function to create the route progress visualization
         function createRouteProgress(route) {
-            if (!route || !route.halte || !route.halte.length) return;
+            const routeProgressView = document.getElementById('routeProgressView');
+            
+            if (!route || !route.halte || !route.halte.length) {
+                routeProgressView.innerHTML = '<div class="no-data">No route data to display</div>';
+                return;
+            }
             
             // Get route color or use default
             const routeColor = route.warna || '#4CAF50';
@@ -797,7 +897,8 @@
                 <span>Rute ${route.id}: ${route.nama}</span>
                 <div>Total ${route.halte.length} halte</div>
             </div>`;
-              // Create the route line with stations
+            
+            // Create the route line with stations
             html += '<div class="route-line">';
             html += '<div class="route-stations">';
             
@@ -839,7 +940,8 @@
                     return halteData.halte.find(h => h.id === halteId);
                 })
                 .filter(halte => halte); // Filter out any undefined halte
-              // Add each station dot on the line (without labels)
+            
+            // Add each station dot on the line (without labels)
             halteObjects.forEach((halte, index) => {
                 // Calculate position (evenly distributed)
                 const position = index / (totalStations - 1) * 100;
@@ -871,7 +973,8 @@
             
             html += '</div>'; // Close route-stations
             html += '</div>'; // Close route-line
-              // Add a legend
+            
+            // Add a legend
             html += `
             <div class="route-legend" style="text-align: center; margin-top: 10px; margin-bottom: 20px; font-size: 12px; color: #666;">
                 <div>Awal → Akhir</div>
@@ -881,7 +984,8 @@
                     <span><span style="color: #F44336;">●</span> <span style="color: #F44336;">↑</span> Arah Pulang</span>
                 </div>
             </div>`;
-              // Add a list of all stations below the line
+            
+            // Add a list of all stations below the line
             html += '<div class="route-stations-list">';
             halteObjects.forEach((halte, index) => {
                 const directionColor = halte.arah && halte.arah.toLowerCase() === 'berangkat' ? 
@@ -926,7 +1030,301 @@
                 stationItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         }
+          // Function to populate halte checkboxes in the route form
+        function populateHalteCheckboxes() {
+            const container = document.getElementById('halteCheckboxContainer');
+            
+            if (!dataLoaded || !halteData.halte.length) {
+                container.innerHTML = '<div class="no-data">No bus stops available. Add bus stops first.</div>';
+                return;
+            }
+            
+            // Sort halte by ID (in ascending order)
+            const sortedHalte = [...halteData.halte].sort((a, b) => {
+                // Sort by ID
+                return a.id - b.id;
+            });
+            
+            // Create checkboxes for each halte
+            let html = '';
+            sortedHalte.forEach(halte => {
+                const directionClass = halte.arah ? 
+                    (halte.arah.toLowerCase() === 'berangkat' ? 'direction-berangkat' : 
+                        (halte.arah.toLowerCase() === 'pulang' ? 'direction-pulang' : '')) : '';
+                
+                html += `
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="halte-${halte.id}" name="halte" value="${halte.id}">
+                        <label for="halte-${halte.id}">
+                            ${halte.nama} (ID: ${halte.id})
+                            ${halte.arah ? `<span class="halte-direction ${directionClass}">${halte.arah}</span>` : ''}
+                        </label>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
         
+        // Setup events for the add data modal
+        function setupAddDataModalEvents() {
+            const addDataModal = document.getElementById('addDataModal');
+            const closeAddDataModal = document.getElementById('closeAddDataModal');
+            const addDataButton = document.getElementById('addDataButton');
+            const addHalteForm = document.getElementById('addHalteForm');
+            const addRouteForm = document.getElementById('addRouteForm');
+            const cancelHalteForm = document.getElementById('cancelHalteForm');
+            const cancelRouteForm = document.getElementById('cancelRouteForm');
+            const addDataTabs = addDataModal.querySelectorAll('.tab');
+            const addDataContents = addDataModal.querySelectorAll('.tab-content');
+              // Show the modal when the add data button is clicked
+            addDataButton.addEventListener('click', function() {
+                addDataModal.style.display = 'block';
+                // Reset forms
+                addHalteForm.reset();
+                addRouteForm.reset();
+                document.getElementById('halteFormMessage').innerHTML = '';
+                document.getElementById('routeFormMessage').innerHTML = '';
+                
+                // Populate the halte checkboxes for route creation
+                if (document.getElementById('add-route').classList.contains('active')) {
+                    populateHalteCheckboxes();
+                }
+            });
+            
+            // Close the modal when the X is clicked
+            closeAddDataModal.addEventListener('click', function() {
+                addDataModal.style.display = 'none';
+            });
+            
+            // Close the modal when clicking outside the modal content
+            window.addEventListener('click', function(event) {
+                if (event.target === addDataModal) {
+                    addDataModal.style.display = 'none';
+                }
+            });
+            
+            // Cancel buttons
+            cancelHalteForm.addEventListener('click', function() {
+                addDataModal.style.display = 'none';
+                addHalteForm.reset();
+            });
+            
+            cancelRouteForm.addEventListener('click', function() {
+                addDataModal.style.display = 'none';
+                addRouteForm.reset();
+            });
+              // Tab switching for add data modal
+            addDataTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and contents
+                    addDataTabs.forEach(t => t.classList.remove('active'));
+                    addDataContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Show corresponding content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    // If switching to route tab, populate the halte checkboxes
+                    if (tabId === 'add-route') {
+                        populateHalteCheckboxes();
+                    }
+                });
+            });              // Handle halte form submission
+            addHalteForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Get form values
+                const halteName = document.getElementById('halteName').value;
+                const halteLong = parseFloat(document.getElementById('halteLong').value);
+                const halteLat = parseFloat(document.getElementById('halteLat').value);
+                const halteDirection = document.getElementById('halteDirection').value;
+                
+                // Auto-generate the next ID
+                let maxId = 0;
+                if (halteData.halte.length > 0) {
+                    maxId = Math.max(...halteData.halte.map(h => h.id));
+                }
+                const newId = maxId + 1;
+                
+                // Create new halte object
+                const newHalte = {
+                    id: newId,
+                    nama: halteName,
+                    long: halteLong,
+                    lat: halteLat,
+                    arah: halteDirection
+                };
+                  // Add to halteData
+                halteData.halte.push(newHalte);
+                
+                // Save to file using server-side approach
+                saveHalteData()
+                    .then(() => {
+                        document.getElementById('halteFormMessage').innerHTML = 
+                            '<div class="success-message">Bus stop added successfully! (ID: ' + newId + ')</div>';
+                        
+                        // Refresh the table if currently viewing halte data
+                        if (currentDataType === 'halte') {
+                            refreshTable();
+                        }
+                        
+                        // Also update the checkbox list for routes if it's visible
+                        if (document.getElementById('add-route').classList.contains('active')) {
+                            populateHalteCheckboxes();
+                        }
+                        
+                        // Reset form after successful submission
+                        setTimeout(() => {
+                            addHalteForm.reset();
+                            // Close modal after a delay
+                            setTimeout(() => {
+                                addDataModal.style.display = 'none';
+                                document.getElementById('halteFormMessage').innerHTML = '';
+                            }, 1000);
+                        }, 1000);
+                    })
+                    .catch((error) => {
+                        document.getElementById('halteFormMessage').innerHTML = 
+                            `<div class="error-message">Error saving data: ${error.message}</div>`;
+                    });
+            });
+            // Handle route form submission
+            addRouteForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Get form values
+                const routeName = document.getElementById('routeName').value;
+                
+                // Get selected halte checkboxes
+                const selectedHaltes = [];
+                document.querySelectorAll('#halteCheckboxContainer input[type="checkbox"]:checked').forEach(checkbox => {
+                    selectedHaltes.push(parseInt(checkbox.value));
+                });
+                
+                // Validate at least one halte is selected
+                if (selectedHaltes.length === 0) {
+                    document.getElementById('routeFormMessage').innerHTML = 
+                        '<div class="error-message">Error: Please select at least one bus stop.</div>';
+                    return;
+                }
+                  // Auto-generate the next ID
+                let maxId = 0;
+                if (ruteData.rute.length > 0) {
+                    maxId = Math.max(...ruteData.rute.map(r => r.id));
+                }
+                const newId = maxId + 1;
+                
+                // Create new route object
+                const newRoute = {
+                    id: newId,
+                    nama: routeName,
+                    halte: selectedHaltes
+                };
+                  // Add to ruteData
+                ruteData.rute.push(newRoute);
+                
+                // Save to file using server-side approach
+                saveRouteData()
+                    .then(() => {
+                        document.getElementById('routeFormMessage').innerHTML = 
+                            '<div class="success-message">Route added successfully! (ID: ' + newId + ')</div>';
+                        
+                        // Refresh the table if currently viewing route data
+                        if (currentDataType === 'rute') {
+                            refreshTable();
+                        }
+                        
+                        // Reset form after successful submission
+                        setTimeout(() => {
+                            addRouteForm.reset();
+                            // Close modal after a delay
+                            setTimeout(() => {
+                                addDataModal.style.display = 'none';
+                                document.getElementById('routeFormMessage').innerHTML = '';
+                            }, 1000);
+                        }, 1000);
+                    })
+                    .catch((error) => {
+                        document.getElementById('routeFormMessage').innerHTML = 
+                            `<div class="error-message">Error saving data: ${error.message}</div>`;
+                    });
+            });
+        }
+          // Function to save halte data to file
+        async function saveHalteData() {
+            try {
+                const response = await fetch('save_halte_data.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(halteData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                if (!result.success) {
+                    throw new Error(result.message || 'Failed to save data');
+                }
+                
+                // Set a success message
+                messageElement.textContent = "Bus stop data saved successfully";
+                setTimeout(() => {
+                    if (messageElement.textContent === "Bus stop data saved successfully") {
+                        messageElement.textContent = "";
+                    }
+                }, 3000);
+                
+                return result;
+            } catch (error) {
+                console.error('Error saving halte data:', error);
+                messageElement.textContent = `Error: ${error.message}`;
+                throw error;
+            }
+        }
+        
+        // Function to save route data to file
+        async function saveRouteData() {
+            try {
+                const response = await fetch('save_route_data.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(ruteData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                if (!result.success) {
+                    throw new Error(result.message || 'Failed to save data');
+                }
+                
+                // Set a success message
+                messageElement.textContent = "Route data saved successfully";
+                setTimeout(() => {
+                    if (messageElement.textContent === "Route data saved successfully") {
+                        messageElement.textContent = "";
+                    }
+                }, 3000);
+                
+                return result;
+            } catch (error) {
+                console.error('Error saving route data:', error);
+                messageElement.textContent = `Error: ${error.message}`;
+                throw error;
+            }
+        }
     </script>
 </body>
 </html>

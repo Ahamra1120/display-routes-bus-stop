@@ -1,381 +1,390 @@
+// filepath: c:\Hamra's Workspace\display routes & bus stop\halte_data.txt
 {
-  "halte": [
-  {
-    "id": 1,
-    "nama": "Terminal Benowo",
-    "long": -7.23558,
-    "lat": 112.60798,
-    "arah": "berangkat"
-  },
-  {
-    "id": 2,
-    "nama": "Halte Singgapur A",
-    "long": -7.2324,
-    "lat": 112.60923,
-    "arah": "berangkat"
-  },
-  {
-    "id": 3,
-    "nama": "Halte Raya Sumberejo A",
-    "long": -7.23031,
-    "lat": 112.60964,
-    "arah": "berangkat"
-  },  {
-    "id": 4,
-    "nama": "Halte Sumberejo Makmur 1A",
-    "long": -7.22919,
-    "lat": 112.60853,
-    "arah": "berangkat"
-  },
-  {
-    "id": 5,
-    "nama": "Halte Sumberejo Makmur 2A",
-    "long": -7.22795,
-    "lat": 112.60726,
-    "arah": "berangkat"
-  },
-  {
-    "id": 6,
-    "nama": "Halte Puskesmas Sumberejo A",
-    "long": -7.22687,
-    "lat": 112.60617,
-    "arah": "berangkat"
-  },  {
-    "id": 7,
-    "nama": "Halte Griya Surabaya Asri",
-    "long": -7.22455,
-    "lat": 112.60388,
-    "arah": "berangkat"
-  },
-  {
-    "id": 8,
-    "nama": "Halte Puskesmas Sumberejo B",
-    "long": -7.22676,
-    "lat": 112.60611,
-    "arah": "berangkat"
-  },
-  {
-    "id": 9,
-    "nama": "Halte Sumberejo Makmur 2B",
-    "long": -7.22792,
-    "lat": 112.6073,
-    "arah": "berangkat"
-  },  {
-    "id": 10,
-    "nama": "Halte Sumberejo Makmur 1B",
-    "long": -7.22916,
-    "lat": 112.60857,
-    "arah": "berangkat"
-  },
-  {
-    "id": 11,
-    "nama": "Halte Raya Sumberejo B",
-    "long": -7.23033,
-    "lat": 112.60974,
-    "arah": "berangkat"
-  },
-  {
-    "id": 12,
-    "nama": "Halte Singgapur B",
-    "long": -7.23247,
-    "lat": 112.60933,
-    "arah": "berangkat"
-  },  {
-    "id": 13,
-    "nama": "Halte Stasiun Benowo A",
-    "long": -7.23484,
-    "lat": 112.6148,
-    "arah": "berangkat"
-  },
-  {
-    "id": 14,
-    "nama": "Halte Kantor Kecamatan Pakal A",
-    "long": -7.24034,
-    "lat": 112.62515,
-    "arah": "berangkat"
-  },
-  {
-    "id": 15,
-    "nama": "Halte Universitas Wijaya Putra A",
-    "long": -7.243744,
-    "lat": 112.632906,
-    "arah": "berangkat"
-  },  {
-    "id": 16,
-    "nama": "Halte Polsek Benowo A",
-    "long": -7.24737,
-    "lat": 112.63876,
-    "arah": "berangkat"
-  },
-  {
-    "id": 17,
-    "nama": "Halte Kelurahan Kandangan A",
-    "long": -7.25242,
-    "lat": 112.65274,
-    "arah": "berangkat"
-  },
-  {
-    "id": 18,
-    "nama": "Halte Kantor Kelurahan Banjar Sugihan A",
-    "long": -7.253596,
-    "lat": 112.657305,
-    "arah": "berangkat"
-  },  {
-    "id": 19,
-    "nama": "Halte Manukan Kulon A",
-    "long": -7.25571,
-    "lat": 112.66341,
-    "arah": "berangkat"
-  },
-  {
-    "id": 20,
-    "nama": "Halte Bibis A",
-    "long": -7.258356,
-    "lat": 112.677642,
-    "arah": "berangkat"
-  },
-  {
-    "id": 21,
-    "nama": "Halte Karangpoh A",
-    "long": -7.258809,
-    "lat": 112.682888,
-    "arah": "berangkat"
-  },  {
-    "id": 22,
-    "nama": "Halte Samsat Tandes A",
-    "long": -7.2595,
-    "lat": 112.68777,
-    "arah": "berangkat"
-  },
-  {
-    "id": 23,
-    "nama": "Halte Tanjungsari A",
-    "long": -7.2616,
-    "lat": 112.69362,
-    "arah": "berangkat"
-  },
-  {
-    "id": 24,
-    "nama": "Halte Simo Jawar 1A",
-    "long": -7.26681,
-    "lat": 112.70176,
-    "arah": "berangkat"
-  },  {
-    "id": 25,
-    "nama": "Halte Simo Katrungan Kidul A",
-    "long": -7.26893,
-    "lat": 112.71542,
-    "arah": "berangkat"
-  },
-  {
-    "id": 26,
-    "nama": "Halte Butulan A",
-    "long": -7.27169,
-    "lat": 112.72331,
-    "arah": "berangkat"
-  },
-  {
-    "id": 27,
-    "nama": "Halte Kupang Krajan A",
-    "long": -7.27246,
-    "lat": 112.72753,
-    "arah": "berangkat"
-  },
-  {
-    "id": 28,
-    "nama": "Halte Pasar Kembang A",
-    "long": -7.26994,
-    "lat": 112.72854,
-    "arah": "berangkat"
-  },
-  {
-    "id": 29,
-    "nama": "Halte Wonorejo A",
-    "long": -7.26728,
-    "lat": 112.72952,
-    "arah": "berangkat"
-  },
-  {
-    "id": 30,
-    "nama": "Halte Kedung Doro A",
-    "long": -7.26093,
-    "lat": 112.73202,
-    "arah": "berangkat"
-  },
-  {
-    "id": 31,
-    "nama": "Halte Sindoro",
-    "long": -7.25759,
-    "lat": 112.7335,
-    "arah": "berangkat"
-  },
-  {
-    "id": 32,
-    "nama": "Halte SMPN 3",
-    "long": -7.25593,
-    "lat": 112.73597,
-    "arah": "berangkat"
-  },
-  {
-    "id": 33,
-    "nama": "Halte SIOLA",
-    "long": -7.25726,
-    "lat": 112.73775,
-    "arah": "berangkat"
-  },
-  {
-    "id": 34,
-    "nama": "Halte Tunjungan",
-    "long": -7.25985,
-    "lat": 112.73921,
-    "arah": "berangkat"
-  },
-  {
-    "id": 35,
-    "nama": "Halte Embong Malang",
-    "long": -7.26037,
-    "lat": 112.73741,
-    "arah": "pulang"
-  },
-  {
-    "id": 36,
-    "nama": "Halte Embong Malang 2",
-    "long": -7.25895,
-    "lat": 112.73411,
-    "arah": "pulang"
-  },
-  {
-    "id": 37,
-    "nama": "Halte Kedung Doro B",
-    "long": -7.26144,
-    "lat": 112.73205,
-    "arah": "pulang"
-  },
-  {
-    "id": 38,
-    "nama": "Halte Wonorejo B",
-    "long": -7.26744,
-    "lat": 112.72964,
-    "arah": "pulang"
-  },
-  {
-    "id": 39,
-    "nama": "Halte Pasar Kembang B",
-    "long": -7.2702,
-    "lat": 112.72867,
-    "arah": "pulang"
-  },
-  {
-    "id": 40,
-    "nama": "Halte Kupang Krajan B",
-    "long": -7.27285,
-    "lat": 112.72768,
-    "arah": "pulang"
-  },
-  {
-    "id": 41,
-    "nama": "Halte Butulan B",
-    "long": -7.27181,
-    "lat": 112.72313,
-    "arah": "pulang"
-  },
-  {
-    "id": 42,
-    "nama": "Halte Simo Katrungan Kidul B",
-    "long": -7.2691,
-    "lat": 112.71534,
-    "arah": "pulang"
-  },
-  {
-    "id": 43,
-    "nama": "Halte Simo Jawar 1B",
-    "long": -7.2671,
-    "lat": 112.70162,
-    "arah": "pulang"
-  },
-  {
-    "id": 44,
-    "nama": "Halte Tanjungsari B",
-    "long": -7.26187,
-    "lat": 112.69341,
-    "arah": "pulang"
-  },
-  {
-    "id": 45,
-    "nama": "Halte Samsat Tandes B",
-    "long": -7.25976,
-    "lat": 112.68789,
-    "arah": "pulang"
-  },
-  {
-    "id": 46,
-    "nama": "Halte Karangpoh B",
-    "long": -7.25904,
-    "lat": 112.683083,
-    "arah": "pulang"
-  },
-  {
-    "id": 47,
-    "nama": "Halte Bibis B",
-    "long": -7.258598,
-    "lat": 112.677659,
-    "arah": "pulang"
-  },
-  {
-    "id": 48,
-    "nama": "Halte Manukan Kulon B",
-    "long": -7.2559,
-    "lat": 112.66336,
-    "arah": "pulang"
-  },
-  {
-    "id": 49,
-    "nama": "Halte Kantor Kelurahan Banjar Sugihan B",
-    "long": -7.253853,
-    "lat": 112.657634,
-    "arah": "pulang"
-  },
-  {
-    "id": 50,
-    "nama": "Halte Kantor Kelurahan Kandangan B",
-    "long": -7.25258,
-    "lat": 112.65257,
-    "arah": "pulang"
-  },
-  {
-    "id": 51,
-    "nama": "Halte Polsek Benowo B",
-    "long": -7.24755,
-    "lat": 112.63878,
-    "arah": "pulang"
-  },
-  {
-    "id": 52,
-    "nama": "Halte Universitas Wijaya Putra B",
-    "long": -7.243934,
-    "lat": 112.633003,
-    "arah": "pulang"
-  },
-  {
-    "id": 53,
-    "nama": "Halte Kantor Kecamatan Pakal B",
-    "long": -7.24049,
-    "lat": 112.62505,
-    "arah": "pulang"
-  },
-  {
-    "id": 54,
-    "nama": "Halte Stasiun Benowo B",
-    "long": -7.23489,
-    "lat": 112.61477,
-    "arah": "pulang"
-  },
-  {
-    "id": 55,
-    "nama": "Terminal Benowo",
-    "long": -7.23558,
-    "lat": 112.60798,
-    "arah": "pulang"
-  }
-]
+    "halte": [
+        {
+            "id": 1,
+            "nama": "Terminal Benowo",
+            "long": -7.23558,
+            "lat": 112.60798,
+            "arah": "berangkat"
+        },
+        {
+            "id": 2,
+            "nama": "Halte Singgapur A",
+            "long": -7.2324,
+            "lat": 112.60923,
+            "arah": "berangkat"
+        },
+        {
+            "id": 3,
+            "nama": "Halte Raya Sumberejo A",
+            "long": -7.23031,
+            "lat": 112.60964,
+            "arah": "berangkat"
+        },
+        {
+            "id": 4,
+            "nama": "Halte Sumberejo Makmur 1A",
+            "long": -7.22919,
+            "lat": 112.60853,
+            "arah": "berangkat"
+        },
+        {
+            "id": 5,
+            "nama": "Halte Sumberejo Makmur 2A",
+            "long": -7.22795,
+            "lat": 112.60726,
+            "arah": "berangkat"
+        },
+        {
+            "id": 6,
+            "nama": "Halte Puskesmas Sumberejo A",
+            "long": -7.22687,
+            "lat": 112.60617,
+            "arah": "berangkat"
+        },
+        {
+            "id": 7,
+            "nama": "Halte Griya Surabaya Asri",
+            "long": -7.22455,
+            "lat": 112.60388,
+            "arah": "berangkat"
+        },
+        {
+            "id": 8,
+            "nama": "Halte Puskesmas Sumberejo B",
+            "long": -7.22676,
+            "lat": 112.60611,
+            "arah": "berangkat"
+        },
+        {
+            "id": 9,
+            "nama": "Halte Sumberejo Makmur 2B",
+            "long": -7.22792,
+            "lat": 112.6073,
+            "arah": "berangkat"
+        },
+        {
+            "id": 10,
+            "nama": "Halte Sumberejo Makmur 1B",
+            "long": -7.22916,
+            "lat": 112.60857,
+            "arah": "berangkat"
+        },
+        {
+            "id": 11,
+            "nama": "Halte Raya Sumberejo B",
+            "long": -7.23033,
+            "lat": 112.60974,
+            "arah": "berangkat"
+        },
+        {
+            "id": 12,
+            "nama": "Halte Singgapur B",
+            "long": -7.23247,
+            "lat": 112.60933,
+            "arah": "berangkat"
+        },
+        {
+            "id": 13,
+            "nama": "Halte Stasiun Benowo A",
+            "long": -7.23484,
+            "lat": 112.6148,
+            "arah": "berangkat"
+        },
+        {
+            "id": 14,
+            "nama": "Halte Kantor Kecamatan Pakal A",
+            "long": -7.24034,
+            "lat": 112.62515,
+            "arah": "berangkat"
+        },
+        {
+            "id": 15,
+            "nama": "Halte Universitas Wijaya Putra A",
+            "long": -7.243744,
+            "lat": 112.632906,
+            "arah": "berangkat"
+        },
+        {
+            "id": 16,
+            "nama": "Halte Polsek Benowo A",
+            "long": -7.24737,
+            "lat": 112.63876,
+            "arah": "berangkat"
+        },
+        {
+            "id": 17,
+            "nama": "Halte Kelurahan Kandangan A",
+            "long": -7.25242,
+            "lat": 112.65274,
+            "arah": "berangkat"
+        },
+        {
+            "id": 18,
+            "nama": "Halte Kantor Kelurahan Banjar Sugihan A",
+            "long": -7.253596,
+            "lat": 112.657305,
+            "arah": "berangkat"
+        },
+        {
+            "id": 19,
+            "nama": "Halte Manukan Kulon A",
+            "long": -7.25571,
+            "lat": 112.66341,
+            "arah": "berangkat"
+        },
+        {
+            "id": 20,
+            "nama": "Halte Bibis A",
+            "long": -7.258356,
+            "lat": 112.677642,
+            "arah": "berangkat"
+        },
+        {
+            "id": 21,
+            "nama": "Halte Karangpoh A",
+            "long": -7.258809,
+            "lat": 112.682888,
+            "arah": "berangkat"
+        },
+        {
+            "id": 22,
+            "nama": "Halte Samsat Tandes A",
+            "long": -7.2595,
+            "lat": 112.68777,
+            "arah": "berangkat"
+        },
+        {
+            "id": 23,
+            "nama": "Halte Tanjungsari A",
+            "long": -7.2616,
+            "lat": 112.69362,
+            "arah": "berangkat"
+        },
+        {
+            "id": 24,
+            "nama": "Halte Simo Jawar 1A",
+            "long": -7.26681,
+            "lat": 112.70176,
+            "arah": "berangkat"
+        },
+        {
+            "id": 25,
+            "nama": "Halte Simo Katrungan Kidul A",
+            "long": -7.26893,
+            "lat": 112.71542,
+            "arah": "berangkat"
+        },
+        {
+            "id": 26,
+            "nama": "Halte Butulan A",
+            "long": -7.27169,
+            "lat": 112.72331,
+            "arah": "berangkat"
+        },
+        {
+            "id": 27,
+            "nama": "Halte Kupang Krajan A",
+            "long": -7.27246,
+            "lat": 112.72753,
+            "arah": "berangkat"
+        },
+        {
+            "id": 28,
+            "nama": "Halte Pasar Kembang A",
+            "long": -7.26994,
+            "lat": 112.72854,
+            "arah": "berangkat"
+        },
+        {
+            "id": 29,
+            "nama": "Halte Wonorejo A",
+            "long": -7.26728,
+            "lat": 112.72952,
+            "arah": "berangkat"
+        },
+        {
+            "id": 30,
+            "nama": "Halte Kedung Doro A",
+            "long": -7.26093,
+            "lat": 112.73202,
+            "arah": "berangkat"
+        },
+        {
+            "id": 31,
+            "nama": "Halte Sindoro",
+            "long": -7.25759,
+            "lat": 112.7335,
+            "arah": "berangkat"
+        },
+        {
+            "id": 32,
+            "nama": "Halte SMPN 3",
+            "long": -7.25593,
+            "lat": 112.73597,
+            "arah": "berangkat"
+        },
+        {
+            "id": 33,
+            "nama": "Halte SIOLA",
+            "long": -7.25726,
+            "lat": 112.73775,
+            "arah": "berangkat"
+        },
+        {
+            "id": 34,
+            "nama": "Halte Tunjungan",
+            "long": -7.25985,
+            "lat": 112.73921,
+            "arah": "berangkat"
+        },
+        {
+            "id": 35,
+            "nama": "Halte Embong Malang",
+            "long": -7.26037,
+            "lat": 112.73741,
+            "arah": "pulang"
+        },
+        {
+            "id": 36,
+            "nama": "Halte Embong Malang 2",
+            "long": -7.25895,
+            "lat": 112.73411,
+            "arah": "pulang"
+        },
+        {
+            "id": 37,
+            "nama": "Halte Kedung Doro B",
+            "long": -7.26144,
+            "lat": 112.73205,
+            "arah": "pulang"
+        },
+        {
+            "id": 38,
+            "nama": "Halte Wonorejo B",
+            "long": -7.26744,
+            "lat": 112.72964,
+            "arah": "pulang"
+        },
+        {
+            "id": 39,
+            "nama": "Halte Pasar Kembang B",
+            "long": -7.2702,
+            "lat": 112.72867,
+            "arah": "pulang"
+        },
+        {
+            "id": 40,
+            "nama": "Halte Kupang Krajan B",
+            "long": -7.27285,
+            "lat": 112.72768,
+            "arah": "pulang"
+        },
+        {
+            "id": 41,
+            "nama": "Halte Butulan B",
+            "long": -7.27181,
+            "lat": 112.72313,
+            "arah": "pulang"
+        },
+        {
+            "id": 42,
+            "nama": "Halte Simo Katrungan Kidul B",
+            "long": -7.2691,
+            "lat": 112.71534,
+            "arah": "pulang"
+        },
+        {
+            "id": 43,
+            "nama": "Halte Simo Jawar 1B",
+            "long": -7.2671,
+            "lat": 112.70162,
+            "arah": "pulang"
+        },
+        {
+            "id": 44,
+            "nama": "Halte Tanjungsari B",
+            "long": -7.26187,
+            "lat": 112.69341,
+            "arah": "pulang"
+        },
+        {
+            "id": 45,
+            "nama": "Halte Samsat Tandes B",
+            "long": -7.25976,
+            "lat": 112.68789,
+            "arah": "pulang"
+        },
+        {
+            "id": 46,
+            "nama": "Halte Karangpoh B",
+            "long": -7.25904,
+            "lat": 112.683083,
+            "arah": "pulang"
+        },
+        {
+            "id": 47,
+            "nama": "Halte Bibis B",
+            "long": -7.258598,
+            "lat": 112.677659,
+            "arah": "pulang"
+        },
+        {
+            "id": 48,
+            "nama": "Halte Manukan Kulon B",
+            "long": -7.2559,
+            "lat": 112.66336,
+            "arah": "pulang"
+        },
+        {
+            "id": 49,
+            "nama": "Halte Kantor Kelurahan Banjar Sugihan B",
+            "long": -7.253853,
+            "lat": 112.657634,
+            "arah": "pulang"
+        },
+        {
+            "id": 50,
+            "nama": "Halte Kantor Kelurahan Kandangan B",
+            "long": -7.25258,
+            "lat": 112.65257,
+            "arah": "pulang"
+        },
+        {
+            "id": 51,
+            "nama": "Halte Polsek Benowo B",
+            "long": -7.24755,
+            "lat": 112.63878,
+            "arah": "pulang"
+        },
+        {
+            "id": 52,
+            "nama": "Halte Universitas Wijaya Putra B",
+            "long": -7.243934,
+            "lat": 112.633003,
+            "arah": "pulang"
+        },
+        {
+            "id": 53,
+            "nama": "Halte Kantor Kecamatan Pakal B",
+            "long": -7.24049,
+            "lat": 112.62505,
+            "arah": "pulang"
+        },
+        {
+            "id": 54,
+            "nama": "Halte Stasiun Benowo B",
+            "long": -7.23489,
+            "lat": 112.61477,
+            "arah": "pulang"
+        },
+        {
+            "id": 55,
+            "nama": "Terminal Benowo",
+            "long": -7.23558,
+            "lat": 112.60798,
+            "arah": "pulang"
+        }
+    ]
 }
