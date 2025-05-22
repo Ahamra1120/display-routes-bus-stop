@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transit Information System</title>
+    <title>RUTE FEEDER - WIRA WIRI FD01</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -173,8 +173,7 @@
             color: #333;
             text-decoration: none;
         }
-        
-        .detail-button {
+          .detail-button {
             padding: 5px 10px;
             background-color: #2196F3;
             color: white;
@@ -185,7 +184,38 @@
         
         .detail-button:hover {
             background-color: #0b7dda;
-        }          .route-progress {
+        }
+        
+        .edit-button {
+            padding: 5px 10px;
+            background-color: #FFC107;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        
+        .edit-button:hover {
+            background-color: #FFA000;
+        }
+        
+        .delete-button {
+            padding: 5px 10px;
+            background-color: #F44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .delete-button:hover {
+            background-color: #D32F2F;
+        }
+        
+        .action-buttons {
+            white-space: nowrap;
+        }.route-progress {
             margin: 30px 0;
             padding: 20px;
             background-color: #f9f9f9;
@@ -490,13 +520,12 @@
         }
     </style>
 </head>
-<body>
-    <div class="container">
+<body>    <div class="container">
         <div class="header">
-            <h1 class="title">Transit Information System</h1>
+            <h1 class="title">RUTE FEEDER</h1>
+            <h2 style="margin: 5px 0; color: #555; font-size: 1.2em;">WIRA WIRI FD01 Terminal Benowo - Tunjungan</h2>
             <div class="user-info">
-                <p>User: Ahamra1120</p>
-                <p>Date: 2025-05-21 00:20:47</p>
+                <p id="current-date">Date: Loading...</p>
             </div>
         </div>
           <div class="controls">
@@ -721,8 +750,7 @@
             // Clear previous message if it's just the loading message
             if (messageElement.textContent === 'Loading data...') {
                 messageElement.textContent = '';
-            }
-              // Set table headers based on current data type
+            }              // Set table headers based on current data type
             let headerRow = '';
             if (currentDataType === 'halte') {
                 headerRow = `
@@ -732,6 +760,7 @@
                         <th>Longitude</th>
                         <th>Latitude</th>
                         <th>Arah</th>
+                        <th>Action</th>
                     </tr>
                 `;
             } else { // rute
@@ -739,7 +768,8 @@
                     <tr>
                         <th>ID</th>
                         <th>Nama Rute</th>
-                        <th>Aksi</th>
+                        <th>Detail</th>
+                        <th>Action</th>
                     </tr>
                 `;
             }
@@ -768,12 +798,11 @@
             } else if (searchTerm !== '') {
                 messageElement.textContent = `Found ${filteredData.length} ${currentDataType}(s) matching "${searchTerm}"`;
             }
-            
-            // Populate table rows
+              // Populate table rows
             if (filteredData.length === 0) {
                 tableBody.innerHTML = `
                     <tr>
-                        <td colspan="${currentDataType === 'halte' ? 5 : 3}" class="no-data">
+                        <td colspan="${currentDataType === 'halte' ? 6 : 4}" class="no-data">
                             No data to display
                         </td>
                     </tr>
@@ -788,6 +817,10 @@
                             <td>${halte.long}</td>
                             <td>${halte.lat}</td>
                             <td>${halte.arah || '-'}</td>
+                            <td class="action-buttons">
+                                <button class="edit-button" onclick="editHalte(${halte.id})">Edit</button>
+                                <button class="delete-button" onclick="deleteHalte(${halte.id})">Delete</button>
+                            </td>
                         </tr>
                     `).join('');                } else { // rute
                     rows = filteredData.map(rute => `
@@ -797,13 +830,38 @@
                             <td>
                                 <button class="detail-button" onclick="showRouteDetails(${rute.id})">Lihat Detail</button>
                             </td>
+                            <td class="action-buttons">
+                                <button class="edit-button" onclick="editRoute(${rute.id})">Edit</button>
+                                <button class="delete-button" onclick="deleteRoute(${rute.id})">Delete</button>
+                            </td>
                         </tr>
                     `).join('');
                 }
                 tableBody.innerHTML = rows;
             }
-        }        // Initialize by loading data when the page loads
+        }        // Function to update the current date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit',
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: false 
+            };
+            const formattedDate = now.toLocaleString('en-US', options).replace(',', '');
+            document.getElementById('current-date').textContent = 'Date: ' + formattedDate;
+        }
+        
+        // Initialize by loading data when the page loads
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize and update the date/time
+            updateDateTime();
+            // Update the date/time every second
+            setInterval(updateDateTime, 1000);
+            
             loadData();
             setupModalEvents();
             setupAddDataModalEvents();
@@ -1076,47 +1134,85 @@
             const cancelHalteForm = document.getElementById('cancelHalteForm');
             const cancelRouteForm = document.getElementById('cancelRouteForm');
             const addDataTabs = addDataModal.querySelectorAll('.tab');
-            const addDataContents = addDataModal.querySelectorAll('.tab-content');
-              // Show the modal when the add data button is clicked
+            const addDataContents = addDataModal.querySelectorAll('.tab-content');              // Show the modal when the add data button is clicked
             addDataButton.addEventListener('click', function() {
                 addDataModal.style.display = 'block';
-                // Reset forms
-                addHalteForm.reset();
-                addRouteForm.reset();
-                document.getElementById('halteFormMessage').innerHTML = '';
-                document.getElementById('routeFormMessage').innerHTML = '';
                 
-                // Populate the halte checkboxes for route creation
-                if (document.getElementById('add-route').classList.contains('active')) {
-                    populateHalteCheckboxes();
-                }
+                // Reset forms and state
+                resetForms();
+                
+                // Reset tab selection to default
+                addDataTabs.forEach(t => t.classList.remove('active'));
+                addDataContents.forEach(c => c.classList.remove('active'));
+                
+                document.querySelector('.tab[data-tab="add-halte"]').classList.add('active');
+                document.getElementById('add-halte').classList.add('active');
+                
+                // Populate the halte checkboxes for route creation (pre-load for quicker access)
+                populateHalteCheckboxes();
             });
-            
-            // Close the modal when the X is clicked
+              // Close the modal when the X is clicked
             closeAddDataModal.addEventListener('click', function() {
                 addDataModal.style.display = 'none';
+                resetForms();
             });
             
             // Close the modal when clicking outside the modal content
             window.addEventListener('click', function(event) {
                 if (event.target === addDataModal) {
                     addDataModal.style.display = 'none';
+                    resetForms();
                 }
             });
             
             // Cancel buttons
             cancelHalteForm.addEventListener('click', function() {
+                if (addHalteForm.getAttribute('data-edit-id') && !confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+                    return;
+                }
                 addDataModal.style.display = 'none';
-                addHalteForm.reset();
+                resetForms();
             });
             
             cancelRouteForm.addEventListener('click', function() {
+                if (addRouteForm.getAttribute('data-edit-id') && !confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+                    return;
+                }
                 addDataModal.style.display = 'none';
-                addRouteForm.reset();
+                resetForms();
             });
-              // Tab switching for add data modal
+            
+            // Function to reset forms and edit state
+            function resetForms() {
+                // Reset halte form
+                addHalteForm.reset();
+                addHalteForm.removeAttribute('data-edit-id');
+                document.querySelector('#addHalteForm .submit-button').textContent = 'Submit';
+                document.getElementById('halteFormMessage').innerHTML = '';
+                document.getElementById('addDataTitle').textContent = 'Add New Data';
+                
+                // Reset route form
+                addRouteForm.reset();
+                addRouteForm.removeAttribute('data-edit-id');
+                document.querySelector('#addRouteForm .submit-button').textContent = 'Submit';
+                document.getElementById('routeFormMessage').innerHTML = '';
+            }              // Tab switching for add data modal
             addDataTabs.forEach(tab => {
                 tab.addEventListener('click', function() {
+                    const currentTab = document.querySelector('.tab.active').getAttribute('data-tab');
+                    const newTab = this.getAttribute('data-tab');
+                    
+                    // Check if we're switching away from a form with unsaved edits
+                    if (currentTab === 'add-halte' && addHalteForm.getAttribute('data-edit-id')) {
+                        if (!confirm('Are you sure you want to switch tabs? Any unsaved changes will be lost.')) {
+                            return;
+                        }
+                    } else if (currentTab === 'add-route' && addRouteForm.getAttribute('data-edit-id')) {
+                        if (!confirm('Are you sure you want to switch tabs? Any unsaved changes will be lost.')) {
+                            return;
+                        }
+                    }
+                    
                     // Remove active class from all tabs and contents
                     addDataTabs.forEach(t => t.classList.remove('active'));
                     addDataContents.forEach(c => c.classList.remove('active'));
@@ -1125,15 +1221,17 @@
                     this.classList.add('active');
                     
                     // Show corresponding content
-                    const tabId = this.getAttribute('data-tab');
-                    document.getElementById(tabId).classList.add('active');
+                    document.getElementById(newTab).classList.add('active');
+                    
+                    // Reset forms when switching tabs
+                    resetForms();
                     
                     // If switching to route tab, populate the halte checkboxes
-                    if (tabId === 'add-route') {
+                    if (newTab === 'add-route') {
                         populateHalteCheckboxes();
                     }
                 });
-            });              // Handle halte form submission
+            });// Handle halte form submission
             addHalteForm.addEventListener('submit', function(event) {
                 event.preventDefault();
                 
@@ -1143,23 +1241,48 @@
                 const halteLat = parseFloat(document.getElementById('halteLat').value);
                 const halteDirection = document.getElementById('halteDirection').value;
                 
-                // Auto-generate the next ID
-                let maxId = 0;
-                if (halteData.halte.length > 0) {
-                    maxId = Math.max(...halteData.halte.map(h => h.id));
-                }
-                const newId = maxId + 1;
+                // Check if we're editing an existing bus stop
+                const editId = this.getAttribute('data-edit-id');
+                let newId, successMessage;
                 
-                // Create new halte object
-                const newHalte = {
-                    id: newId,
-                    nama: halteName,
-                    long: halteLong,
-                    lat: halteLat,
-                    arah: halteDirection
-                };
-                  // Add to halteData
-                halteData.halte.push(newHalte);
+                if (editId) {
+                    // Editing existing bus stop
+                    newId = parseInt(editId);
+                    
+                    // Find and update the existing bus stop
+                    const index = halteData.halte.findIndex(h => h.id === newId);
+                    if (index !== -1) {
+                        halteData.halte[index] = {
+                            id: newId,
+                            nama: halteName,
+                            long: halteLong,
+                            lat: halteLat,
+                            arah: halteDirection
+                        };
+                    }
+                    
+                    successMessage = 'Bus stop updated successfully!';
+                } else {
+                    // Adding new bus stop - auto-generate ID
+                    let maxId = 0;
+                    if (halteData.halte.length > 0) {
+                        maxId = Math.max(...halteData.halte.map(h => h.id));
+                    }
+                    newId = maxId + 1;
+                    
+                    // Create new halte object
+                    const newHalte = {
+                        id: newId,
+                        nama: halteName,
+                        long: halteLong,
+                        lat: halteLat,
+                        arah: halteDirection
+                    };
+                    
+                    // Add to halteData
+                    halteData.halte.push(newHalte);
+                    successMessage = 'Bus stop added successfully! (ID: ' + newId + ')';
+                }
                 
                 // Save to file using server-side approach
                 saveHalteData()
@@ -1176,10 +1299,14 @@
                         if (document.getElementById('add-route').classList.contains('active')) {
                             populateHalteCheckboxes();
                         }
-                        
-                        // Reset form after successful submission
+                  // Reset form after successful submission
                         setTimeout(() => {
                             addHalteForm.reset();
+                            addHalteForm.removeAttribute('data-edit-id');
+                            // Reset button text
+                            document.querySelector('#addHalteForm .submit-button').textContent = 'Submit';
+                            // Reset form title
+                            document.getElementById('addDataTitle').textContent = 'Add New Data';
                             // Close modal after a delay
                             setTimeout(() => {
                                 addDataModal.style.display = 'none';
@@ -1191,8 +1318,7 @@
                         document.getElementById('halteFormMessage').innerHTML = 
                             `<div class="error-message">Error saving data: ${error.message}</div>`;
                     });
-            });
-            // Handle route form submission
+            });            // Handle route form submission
             addRouteForm.addEventListener('submit', function(event) {
                 event.preventDefault();
                 
@@ -1211,36 +1337,64 @@
                         '<div class="error-message">Error: Please select at least one bus stop.</div>';
                     return;
                 }
-                  // Auto-generate the next ID
-                let maxId = 0;
-                if (ruteData.rute.length > 0) {
-                    maxId = Math.max(...ruteData.rute.map(r => r.id));
-                }
-                const newId = maxId + 1;
                 
-                // Create new route object
-                const newRoute = {
-                    id: newId,
-                    nama: routeName,
-                    halte: selectedHaltes
-                };
-                  // Add to ruteData
-                ruteData.rute.push(newRoute);
+                // Check if we're editing an existing route
+                const editId = this.getAttribute('data-edit-id');
+                let routeId, successMessage;
+                
+                if (editId) {
+                    // Editing existing route
+                    routeId = parseInt(editId);
+                    
+                    // Find and update the existing route
+                    const index = ruteData.rute.findIndex(r => r.id === routeId);
+                    if (index !== -1) {
+                        ruteData.rute[index] = {
+                            id: routeId,
+                            nama: routeName,
+                            halte: selectedHaltes
+                        };
+                    }
+                    
+                    successMessage = 'Route updated successfully!';
+                } else {
+                    // Auto-generate the next ID for new route
+                    let maxId = 0;
+                    if (ruteData.rute.length > 0) {
+                        maxId = Math.max(...ruteData.rute.map(r => r.id));
+                    }
+                    routeId = maxId + 1;
+                    
+                    // Create new route object
+                    const newRoute = {
+                        id: routeId,
+                        nama: routeName,
+                        halte: selectedHaltes
+                    };
+                    
+                    // Add to ruteData
+                    ruteData.rute.push(newRoute);
+                    
+                    successMessage = 'Route added successfully! (ID: ' + routeId + ')';
+                }
                 
                 // Save to file using server-side approach
                 saveRouteData()
                     .then(() => {
                         document.getElementById('routeFormMessage').innerHTML = 
-                            '<div class="success-message">Route added successfully! (ID: ' + newId + ')</div>';
+                            `<div class="success-message">${successMessage}</div>`;
                         
                         // Refresh the table if currently viewing route data
                         if (currentDataType === 'rute') {
                             refreshTable();
                         }
                         
-                        // Reset form after successful submission
+                        // Reset form and remove edit ID after successful submission
                         setTimeout(() => {
                             addRouteForm.reset();
+                            addRouteForm.removeAttribute('data-edit-id');
+                            // Reset button text
+                            document.querySelector('#addRouteForm .submit-button').textContent = 'Submit';
                             // Close modal after a delay
                             setTimeout(() => {
                                 addDataModal.style.display = 'none';
@@ -1324,6 +1478,157 @@
                 messageElement.textContent = `Error: ${error.message}`;
                 throw error;
             }
+        }
+
+        // Function to edit a bus stop
+        function editHalte(halteId) {
+            const halte = halteData.halte.find(h => h.id === halteId);
+            if (!halte) {
+                alert('Bus stop not found!');
+                return;
+            }
+            
+            // Populate the form with existing data
+            document.getElementById('halteName').value = halte.nama;
+            document.getElementById('halteLong').value = halte.long;
+            document.getElementById('halteLat').value = halte.lat;
+            document.getElementById('halteDirection').value = halte.arah || '';
+            
+            // Store the ID being edited
+            document.getElementById('addHalteForm').setAttribute('data-edit-id', halteId);
+            
+            // Change button text to indicate edit mode
+            const submitButton = document.querySelector('#addHalteForm .submit-button');
+            submitButton.textContent = 'Update';
+            
+            // Set modal title
+            document.getElementById('addDataTitle').textContent = 'Edit Bus Stop';
+            
+            // Activate halte tab
+            const addDataModal = document.getElementById('addDataModal');
+            const tabs = addDataModal.querySelectorAll('.tab');
+            const tabContents = addDataModal.querySelectorAll('.tab-content');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            document.querySelector('.tab[data-tab="add-halte"]').classList.add('active');
+            document.getElementById('add-halte').classList.add('active');
+            
+            // Show the modal
+            addDataModal.style.display = 'block';
+        }
+        
+        // Function to delete a bus stop
+        function deleteHalte(halteId) {
+            if (!confirm(`Are you sure you want to delete bus stop with ID: ${halteId}?`)) {
+                return;
+            }
+            
+            // Check if this bus stop is used in any route
+            const routesUsingHalte = ruteData.rute.filter(route => 
+                route.halte.includes(halteId)
+            );
+            
+            if (routesUsingHalte.length > 0) {
+                const routeNames = routesUsingHalte.map(r => r.nama).join(', ');
+                alert(`Cannot delete this bus stop because it is used in the following routes: ${routeNames}`);
+                return;
+            }
+            
+            // Remove the bus stop from the array
+            halteData.halte = halteData.halte.filter(h => h.id !== halteId);
+            
+            // Save changes
+            saveHalteData()
+                .then(() => {
+                    messageElement.textContent = "Bus stop deleted successfully";
+                    setTimeout(() => {
+                        if (messageElement.textContent === "Bus stop deleted successfully") {
+                            messageElement.textContent = "";
+                        }
+                    }, 3000);
+                    
+                    // Refresh the table
+                    refreshTable();
+                })
+                .catch(error => {
+                    messageElement.textContent = `Error: ${error.message}`;
+                });
+        }
+        
+        // Function to edit a route
+        function editRoute(routeId) {
+            const route = ruteData.rute.find(r => r.id === routeId);
+            if (!route) {
+                alert('Route not found!');
+                return;
+            }
+            
+            // Populate the form with existing data
+            document.getElementById('routeName').value = route.nama;
+            
+            // Store the ID being edited
+            document.getElementById('addRouteForm').setAttribute('data-edit-id', routeId);
+            
+            // Change button text to indicate edit mode
+            const submitButton = document.querySelector('#addRouteForm .submit-button');
+            submitButton.textContent = 'Update';
+            
+            // Set modal title
+            document.getElementById('addDataTitle').textContent = 'Edit Route';
+            
+            // Activate route tab
+            const addDataModal = document.getElementById('addDataModal');
+            const tabs = addDataModal.querySelectorAll('.tab');
+            const tabContents = addDataModal.querySelectorAll('.tab-content');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            document.querySelector('.tab[data-tab="add-route"]').classList.add('active');
+            document.getElementById('add-route').classList.add('active');
+            
+            // Populate and check existing bus stops in the route
+            populateHalteCheckboxes();
+            setTimeout(() => {
+                route.halte.forEach(halteId => {
+                    const checkbox = document.getElementById(`halte-${halteId}`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    }
+                });
+            }, 100);
+            
+            // Show the modal
+            addDataModal.style.display = 'block';
+        }
+        
+        // Function to delete a route
+        function deleteRoute(routeId) {
+            if (!confirm(`Are you sure you want to delete route with ID: ${routeId}?`)) {
+                return;
+            }
+            
+            // Remove the route from the array
+            ruteData.rute = ruteData.rute.filter(r => r.id !== routeId);
+            
+            // Save changes
+            saveRouteData()
+                .then(() => {
+                    messageElement.textContent = "Route deleted successfully";
+                    setTimeout(() => {
+                        if (messageElement.textContent === "Route deleted successfully") {
+                            messageElement.textContent = "";
+                        }
+                    }, 3000);
+                    
+                    // Refresh the table
+                    refreshTable();
+                })
+                .catch(error => {
+                    messageElement.textContent = `Error: ${error.message}`;
+                });
         }
     </script>
 </body>
